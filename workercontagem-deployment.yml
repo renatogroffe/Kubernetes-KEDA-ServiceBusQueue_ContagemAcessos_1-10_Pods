@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workercontagem
+spec:
+  selector:
+    matchLabels:
+      app: workercontagem
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: workercontagem
+    spec:
+      containers:
+      - name: workercontagem
+        image: renatogroffe/workercontagem-servicebusqueue-dotnet6:1
+        env:
+        - name: AzureServiceBus__Queue
+          value: queue-testes
+        - name: AzureServiceBus__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: workercontagemsecret
+              key: ConnectionAzureServiceBus
+        - name: ConnectionStrings__BaseContagem
+          valueFrom:
+            secretKeyRef:
+              name: workercontagemsecret
+              key: ConnectionSqlServer

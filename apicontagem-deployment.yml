@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apicontagem 
+spec:
+  selector:
+    matchLabels:
+      app: apicontagem
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        app: apicontagem 
+    spec:
+      containers:
+        - name: apicontagem 
+          image: renatogroffe/apicontagem-servicebusqueue-dotnet6:1
+          ports:
+          - containerPort: 80
+          env:
+          - name: AzureServiceBus__Queue
+            value: queue-testes
+          - name: AzureServiceBus__ConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: workercontagemsecret
+                key: ConnectionAzureServiceBus
+          - name: ConnectionStrings__BaseContagem
+            valueFrom:
+              secretKeyRef:
+                name: workercontagemsecret
+                key: ConnectionSqlServer
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: apicontagem
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 80 
+    selector:
+        app: apicontagem

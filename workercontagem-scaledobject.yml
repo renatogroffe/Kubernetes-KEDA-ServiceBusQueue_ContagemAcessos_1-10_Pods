@@ -1,0 +1,27 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-auth-workercontagem
+spec:
+  secretTargetRef:
+    - parameter: connection
+      name: workercontagemsecret
+      key: ConnectionAzureServiceBus
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: workercontagem-scaledobject
+spec:
+  scaleTargetRef:
+    name: workercontagem
+  pollingInterval: 10
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+  - type: azure-servicebus
+    metadata:
+      queueName: queue-testes
+      messageCount: "10"
+    authenticationRef:
+      name: keda-trigger-auth-workercontagem
