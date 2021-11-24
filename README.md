@@ -11,6 +11,6 @@ Projeto que serviu de base para o **envio de mensagens a uma fila do Azure Servi
 
 No arquivo **keda-instalacao&sdot;sh** estão as instruções para instalação do KEDA **(Kubernetes Event-driven Autoscaling)** em um **cluster Kubernetes**.
 
-Para os testes de carga que escalam a aplicação utilizei o pacote npm [**loadtest**](https://www.npmjs.com/package/loadtest). O exemplo a seguir procerá com o envio de **20 mil requisições**, simulando **100 usuários concorrentes**:
+Para os testes de carga que escalam a aplicação utilizei o pacote npm [**loadtest**](https://www.npmjs.com/package/loadtest). O exemplo a seguir procerá com o envio de **3 mil requisições**, simulando **50 usuários concorrentes**:
 
-**loadtest -c 100 -n 3000 -k** ***ENDPOINT***
+**loadtest -c 50 -n 3000 -k** ***ENDPOINT***
